@@ -1,6 +1,7 @@
 package com.coodesh.billybrianm.usuariosapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,21 @@ public class UserService {
 	
 	public User save(User u) {
 		return userRepository.save(u);
+	}
+	
+	public Optional<User> find(long id) {
+		return userRepository.findById(id);
+	}
+	
+	public boolean delete(long id) {
+		Optional<User> u = find(id);
+		
+		if(u.isEmpty())
+			return false;
+		
+		userRepository.delete(u.get());
+		return true;
+		
 	}
 
 }
