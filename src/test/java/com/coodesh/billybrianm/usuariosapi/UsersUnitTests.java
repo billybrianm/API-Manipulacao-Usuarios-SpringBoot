@@ -32,6 +32,8 @@ import com.coodesh.billybrianm.usuariosapi.model.Street;
 import com.coodesh.billybrianm.usuariosapi.model.Timezone;
 import com.coodesh.billybrianm.usuariosapi.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,19 +53,17 @@ public class UsersUnitTests {
 	@Test
 	@Order(2)
 	public void testCreateUser() throws Exception {
-
-		User mapToCreate = userToCreate();
+		User user = userToCreate();
 		this.mockMvc.perform(TestRequestAPIKeyFactory.post("/users").contentType(MediaType.APPLICATION_JSON_VALUE)
-        		.content(new ObjectMapper().writeValueAsString(mapToCreate))).andExpect(status().isCreated());
+        		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isCreated());
 	}
 	
 	@Test
 	@Order(3)
 	public void testUpdateUser() throws Exception {
-
-		User mapToCreate = userToUpdate();
+		User user = userToUpdate();
 		this.mockMvc.perform(TestRequestAPIKeyFactory.put("/users").contentType(MediaType.APPLICATION_JSON_VALUE)
-        		.content(new ObjectMapper().writeValueAsString(mapToCreate))).andExpect(status().isCreated());
+        		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isCreated());
 	}
 	
 	private User userToCreate() {	
