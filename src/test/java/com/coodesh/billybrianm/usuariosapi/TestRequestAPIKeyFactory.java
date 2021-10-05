@@ -15,7 +15,7 @@ public class TestRequestAPIKeyFactory {
     }
 	
 	public static MockHttpServletRequestBuilder put(String url) {
-        return MockMvcRequestBuilders.post(url)
+        return MockMvcRequestBuilders.put(url)
                 .header("X-API-KEY", "fc857686d5928f4b1babb2574e93e4f3");
     }
 }
