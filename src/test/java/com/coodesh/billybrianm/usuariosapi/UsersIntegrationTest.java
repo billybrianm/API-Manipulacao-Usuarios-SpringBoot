@@ -2,6 +2,7 @@ package com.coodesh.billybrianm.usuariosapi;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -66,6 +67,29 @@ public class UsersIntegrationTest {
         		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isCreated());
 	}
 	
+	@Test
+	@Order(4)
+	public void testGetUser() throws Exception {
+		User user = userToUpdate();
+		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE)
+        		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isCreated());
+	}
+	
+	@Test
+	@Order(5)
+	public void testGetAllUsers() throws Exception {
+		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk());
+	}
+	
+	@Test
+	@Order(6)
+	public void testGetSingleUser() throws Exception {
+		
+		long id = 27729L;
+		
+		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users/"+id).contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk());
+	}
+	
 	private User userToCreate() {	
 		Name name = new Name("Miss", "Tess", "Boyer");
 		Location location = new Location(new Street(4331, "Place du 8 Février 1962"), "Rennes", "Haute-Saône", "France", "13595", new Coordinates("0.6778", "127.0293"), new Timezone("-3:30", "Newfoundland"));
@@ -74,9 +98,8 @@ public class UsersIntegrationTest {
 		Registered registered = new Registered(LocalDateTime.of(2017, 12, 23, 1, 27), 4);
 		Identifier id = new Identifier("INSEE", "2NNaN25139949 90");
 		Picture picture = new Picture("https://randomuser.me/api/portraits/women/33.jpg", "https://randomuser.me/api/portraits/med/women/33.jpg", "https://randomuser.me/api/portraits/thumb/women/33.jpg");
-		User u = new User(20030L, "female", name, location, "tess.boyer@example.com", login, dob, registered, "05-60-96-09-09", "06-99-08-80-75", id, picture, "FR", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), StatusEnum.PUBLISHED);
+		User u = new User(0L, "female", name, location, "tess.boyer@example.com", login, dob, registered, "05-60-96-09-09", "06-99-08-80-75", id, picture, "FR", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), StatusEnum.PUBLISHED);
 						
-		
 		return u;
 	}
 	
@@ -88,7 +111,7 @@ public class UsersIntegrationTest {
 		Registered registered = new Registered(LocalDateTime.of(2017, 12, 23, 1, 27), 4);
 		Identifier id = new Identifier("INSEE", "2NNaN25139949 90");
 		Picture picture = new Picture("https://randomuser.me/api/portraits/women/33.jpg", "https://randomuser.me/api/portraits/med/women/33.jpg", "https://randomuser.me/api/portraits/thumb/women/33.jpg");
-		User u = new User(20030L, "female", name, location, "tess.boyer@example.com", login, dob, registered, "05-60-96-09-09", "06-99-08-80-75", id, picture, "FR", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), StatusEnum.PUBLISHED);
+		User u = new User(27729L, "female", name, location, "tess.boyer@example.com", login, dob, registered, "05-60-96-09-09", "06-99-08-80-75", id, picture, "FR", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), StatusEnum.PUBLISHED);
 						
 		
 		return u;
