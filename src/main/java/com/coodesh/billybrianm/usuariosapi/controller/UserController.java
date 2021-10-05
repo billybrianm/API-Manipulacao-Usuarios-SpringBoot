@@ -124,19 +124,4 @@ public class UserController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@GetMapping("/usersget")
-	public ResponseEntity<String> getty() {
-		try {
-			
-			int userCount = userService.getRandomUsers();
-						
-			return new ResponseEntity<String>(userCount + " usuários buscados com sucesso.", HttpStatus.OK);
-			
-		} catch (Exception e) {
-			logger.error("Erro interno do servidor ao buscar usuários.");
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
 }
