@@ -51,7 +51,7 @@ public class UserService {
 		if(u.isEmpty())
 			return false;
 		
-		userRepository.delete(u.get());
+		userRepository.deleteById(id);
 		return true;		
 	}
 	
