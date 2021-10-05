@@ -15,8 +15,11 @@ Desafio de desenvolvimento de sistema back-end para API de manipulação de usu�
 
 ### Como instalar e utilizar o projeto
 Sem utilizar Docker:
+
 1- Clone o repositório para uma pasta local
+
 2- Importe o projeto como um "Projeto Existente Maven" na sua IDE de preferência
+
 3- Acesse o diretório do projeto pelo terminal e utilize o seguinte comando para iniciar:
 
 `./mvnw spring-boot:run`
