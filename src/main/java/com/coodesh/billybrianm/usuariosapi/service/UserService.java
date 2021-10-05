@@ -1,14 +1,18 @@
 package com.coodesh.billybrianm.usuariosapi.service;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.coodesh.billybrianm.usuariosapi.enums.StatusEnum;
 import com.coodesh.billybrianm.usuariosapi.model.User;
 import com.coodesh.billybrianm.usuariosapi.repositories.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,26 +55,50 @@ public class UserService {
 		return true;		
 	}
 	
-	public List<User> getRandomUsers() {
+	public Integer getRandomUsers() {
+				
+	    List<User> users = new ArrayList<>();
+		String url = "";
+		int i = 0;
+		int count = 0;
+		String generatedString = generateRandomSeed(4);
 		
-		List<User> users = new ArrayList<>();
-        String url = "https://randomuser.me/api?results=2000";
-        
-        String json = this.restTemplate.getForObject(url, String.class);
-        
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        
-        try {
-        	// acessa o ponto results na árvore do json e busca os objetos como lista de users
-			users = mapper.convertValue(mapper.readTree(json).get("results"), new TypeReference<List<User>>() {}); 
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+		// busca os dados uma página de cada vez, de 100 em 100 até completar os 2000
+		for(i = 0; i < 20; i++) {
+	        url = "https://randomuser.me/api/?page="+i+"&results=100&seed="+generatedString;
+	        
+	        String json = this.restTemplate.getForObject(url, String.class);
+	        
+	        ObjectMapper mapper = new ObjectMapper();
+	        mapper.registerModule(new JavaTimeModule());
+	        
+	        try {
+	        	// acessa o ponto results na árvore do json e busca os objetos como lista de users
+				users = mapper.convertValue(mapper.readTree(json).get("results"), new TypeReference<List<User>>() {}); 
+				
+				for(User u : users) {
+					u.setImported_t(new Date());
+					u.setStatus(StatusEnum.PUBLISHED);
+					count++;
+				}
+				
+				userRepository.saveAll(users);
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 		}
         
-        return users;
+        return count;
     }
+	
+	public String generateRandomSeed(Integer size) {
+		byte[] array = new byte[size]; // gera uma string com digitos aleatórios para ser a seed da api
+	    new Random().nextBytes(array);
+	    String generatedString = new String(array, Charset.forName("UTF-8"));
+	    
+	    return generatedString;
+	}
 
 }
