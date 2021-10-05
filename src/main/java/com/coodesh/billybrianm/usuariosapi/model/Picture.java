@@ -15,7 +15,7 @@ public class Picture {
 	@Column(name = "picture_thumbnail")
 	private String thumbnail;
 	
-	private Picture() {}
+	public Picture() {}
 
 	public Picture(String large, String medium, String thumbnail) {
 		super();
