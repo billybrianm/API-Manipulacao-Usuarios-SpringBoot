@@ -63,26 +63,19 @@ public class UsersIntegrationTest {
 	@Order(3)
 	public void testUpdateUser() throws Exception {
 		User user = userToUpdate();
-		this.mockMvc.perform(TestRequestAPIKeyFactory.put("/users").contentType(MediaType.APPLICATION_JSON_VALUE)
-        		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isCreated());
+		this.mockMvc.perform(TestRequestAPIKeyFactory.put("/users/27729").contentType(MediaType.APPLICATION_JSON_VALUE)
+        		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isOk());
 	}
+	
 	
 	@Test
 	@Order(4)
-	public void testGetUser() throws Exception {
-		User user = userToUpdate();
-		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE)
-        		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isCreated());
-	}
-	
-	@Test
-	@Order(5)
 	public void testGetAllUsers() throws Exception {
 		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk());
 	}
 	
 	@Test
-	@Order(6)
+	@Order(5)
 	public void testGetSingleUser() throws Exception {
 		
 		long id = 27729L;
