@@ -9,6 +9,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,6 +34,7 @@ import com.coodesh.billybrianm.usuariosapi.model.Registered;
 import com.coodesh.billybrianm.usuariosapi.model.Street;
 import com.coodesh.billybrianm.usuariosapi.model.Timezone;
 import com.coodesh.billybrianm.usuariosapi.model.User;
+import com.coodesh.billybrianm.usuariosapi.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -44,7 +47,7 @@ public class UsersIntegrationTest {
 	
 	@Autowired
     private MockMvc mockMvc;
-
+	
 	@Test
 	@Order(1)
 	public void contextLoad() {
@@ -81,6 +84,17 @@ public class UsersIntegrationTest {
 		long id = 27729L;
 		
 		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users/"+id).contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk());
+	}
+	
+	@Test
+	@Order(6)
+	public void testDeleteUser() throws Exception {
+		
+		long id = 27729L;
+		
+		this.mockMvc.perform(TestRequestAPIKeyFactory.delete("/users/"+id).contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk());
+		
+		
 	}
 	
 	private User userToCreate() {	
