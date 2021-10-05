@@ -39,7 +39,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @AutoConfigureMockMvc
 @TestMethodOrder(OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class UsersUnitTests {
+public class UsersIntegrationTest {
 	
 	@Autowired
     private MockMvc mockMvc;
@@ -80,10 +80,16 @@ public class UsersUnitTests {
 		return u;
 	}
 	
-	private User userToUpdate() {		
-		User u = new User();
-		
-		u.setGender("female");
+	private User userToUpdate() {	
+		Name name = new Name("Miss", "Tess", "Boyer");
+		Location location = new Location(new Street(4331, "Place du 8 Février 1962"), "Rennes", "Haute-Saône", "France", "13595", new Coordinates("0.6778", "127.0293"), new Timezone("-3:30", "Newfoundland"));
+		Login login = new Login("f12464c6-09f5-4d9d-bb02-0c1e5d91fa0e", "blackbird805", "51505150", "J7v1LZUT", "a6372e56b718cafae887fff7c48b7f07", "f66f35c58e340b11648e9dc1de9e66a32da96df7", "ca1b1f8868ab94ae5359e50e31c1c790e51f862b5c61a38ce28dfd466d6c7a9d");
+		DateOfBirth dob = new DateOfBirth(LocalDateTime.of(1948, 9, 19, 7, 39), 73);
+		Registered registered = new Registered(LocalDateTime.of(2017, 12, 23, 1, 27), 4);
+		Identifier id = new Identifier("INSEE", "2NNaN25139949 90");
+		Picture picture = new Picture("https://randomuser.me/api/portraits/women/33.jpg", "https://randomuser.me/api/portraits/med/women/33.jpg", "https://randomuser.me/api/portraits/thumb/women/33.jpg");
+		User u = new User(20030L, "female", name, location, "tess.boyer@example.com", login, dob, registered, "05-60-96-09-09", "06-99-08-80-75", id, picture, "FR", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), StatusEnum.PUBLISHED);
+						
 		
 		return u;
 	}
