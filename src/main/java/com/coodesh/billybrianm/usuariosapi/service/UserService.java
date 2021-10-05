@@ -1,6 +1,5 @@
 package com.coodesh.billybrianm.usuariosapi.service;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,10 +92,19 @@ public class UserService {
         return count;
     }
 	
+	// gera uma string com digitos aleatórios para ser a seed da api
 	public String generateRandomSeed(Integer size) {
-		byte[] array = new byte[size]; // gera uma string com digitos aleatórios para ser a seed da api
-	    new Random().nextBytes(array);
-	    String generatedString = new String(array, Charset.forName("UTF-8"));
+		int leftLimit = 97;
+	    int rightLimit = 122;
+	    int targetStringLength = size;
+	    Random random = new Random();
+	    StringBuilder buffer = new StringBuilder(targetStringLength);
+	    for (int i = 0; i < targetStringLength; i++) {
+	        int randomLimitedInt = leftLimit + (int) 
+	          (random.nextFloat() * (rightLimit - leftLimit + 1));
+	        buffer.append((char) randomLimitedInt);
+	    }
+	    String generatedString = buffer.toString();
 	    
 	    return generatedString;
 	}
