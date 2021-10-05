@@ -92,7 +92,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") long id, User user) {
+	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
 		try {
 			user.setUserid(id);
 			User _user = userService.save(user);
