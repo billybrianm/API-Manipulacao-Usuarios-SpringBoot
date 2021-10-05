@@ -1,5 +1,12 @@
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM ubuntu
+
+RUN echo "#!/bin/bash\n" > /startscript.sh
+RUN echo "mkdir github\n" >> /startscript.sh
+RUN echo "cd github\n" >> /startscript.sh
+RUN echo "git clone \$github\n" >> /startscript.sh
+RUN echo "cd *\n" >> /startscript.sh
+RUN echo "make dockertest\n" >> /startscript.sh
+
+RUN chmod +x /startscript.sh
+
+CMD /startscript.sh
