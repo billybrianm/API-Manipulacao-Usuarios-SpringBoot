@@ -10,11 +10,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.coodesh.billybrianm.usuariosapi.enums.StatusEnum;
 
 
 @Entity
 @Table(name = "users")
+@SQLDelete(sql = "UPDATE Users SET status = 0 WHERE userid=?")
+@Where(clause = "status=2")
 public class User {
 	
 	@Id
