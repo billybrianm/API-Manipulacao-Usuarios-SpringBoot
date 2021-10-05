@@ -31,7 +31,7 @@ class UsersUnitTest {
     
     @MockBean
     UserRepository userRepository;
-
+    
 	
 	@Test
 	public void testServiceNotNull() {
@@ -40,7 +40,8 @@ class UsersUnitTest {
 	
 	@Test
 	public void testScheduledRandomUsers() {
-		Assertions.assertEquals(userService.getRandomUsers(), 2000);
+		
+		Assertions.assertEquals(2000, userService.getRandomUsers());
 	}
 	
 	@Test

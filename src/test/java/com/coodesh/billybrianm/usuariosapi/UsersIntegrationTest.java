@@ -9,7 +9,6 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -48,25 +46,29 @@ public class UsersIntegrationTest {
 	@Autowired
     private MockMvc mockMvc;
 	
+	@Autowired
+    UserRepository userRepository;
+	
 	@Test
 	@Order(1)
 	public void contextLoad() {
 		assertNotNull(mockMvc);
 	}
-	
+		
 	@Test
 	@Order(2)
 	public void testCreateUser() throws Exception {
 		User user = userToCreate();
 		this.mockMvc.perform(TestRequestAPIKeyFactory.post("/users").contentType(MediaType.APPLICATION_JSON_VALUE)
         		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isCreated());
+		
 	}
 	
 	@Test
 	@Order(3)
 	public void testUpdateUser() throws Exception {
 		User user = userToUpdate();
-		this.mockMvc.perform(TestRequestAPIKeyFactory.put("/users/27729").contentType(MediaType.APPLICATION_JSON_VALUE)
+		this.mockMvc.perform(TestRequestAPIKeyFactory.put("/users/"+userRepository.getLast()).contentType(MediaType.APPLICATION_JSON_VALUE)
         		.content(new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(user))).andExpect(status().isOk());
 	}
 	
@@ -80,19 +82,15 @@ public class UsersIntegrationTest {
 	@Test
 	@Order(5)
 	public void testGetSingleUser() throws Exception {
-		
-		long id = 27729L;
-		
-		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users/"+id).contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk());
+				
+		this.mockMvc.perform(TestRequestAPIKeyFactory.get("/users/"+userRepository.getLast()).contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk());
 	}
 	
 	@Test
 	@Order(6)
 	public void testDeleteUser() throws Exception {
-		
-		long id = 27729L;
-		
-		this.mockMvc.perform(TestRequestAPIKeyFactory.delete("/users/"+id).contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk());
+				
+		this.mockMvc.perform(TestRequestAPIKeyFactory.delete("/users/"+userRepository.getLast()).contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk());
 		
 		
 	}
@@ -111,14 +109,14 @@ public class UsersIntegrationTest {
 	}
 	
 	private User userToUpdate() {	
-		Name name = new Name("Miss", "Tess", "Boyer");
-		Location location = new Location(new Street(4331, "Place du 8 Février 1962"), "Rennes", "Haute-Saône", "France", "13595", new Coordinates("0.6778", "127.0293"), new Timezone("-3:30", "Newfoundland"));
+		Name name = new Name("Mr", "Rasmus", "Møller");
+		Location location = new Location(new Street(4331, "Platanvej"), "Rennes", "Danmark", "Denmark", "13595", new Coordinates("0.6778", "127.0293"), new Timezone("-3:30", "Newfoundland"));
 		Login login = new Login("f12464c6-09f5-4d9d-bb02-0c1e5d91fa0e", "blackbird805", "51505150", "J7v1LZUT", "a6372e56b718cafae887fff7c48b7f07", "f66f35c58e340b11648e9dc1de9e66a32da96df7", "ca1b1f8868ab94ae5359e50e31c1c790e51f862b5c61a38ce28dfd466d6c7a9d");
 		DateOfBirth dob = new DateOfBirth(LocalDateTime.of(1948, 9, 19, 7, 39), 73);
 		Registered registered = new Registered(LocalDateTime.of(2017, 12, 23, 1, 27), 4);
 		Identifier id = new Identifier("INSEE", "2NNaN25139949 90");
 		Picture picture = new Picture("https://randomuser.me/api/portraits/women/33.jpg", "https://randomuser.me/api/portraits/med/women/33.jpg", "https://randomuser.me/api/portraits/thumb/women/33.jpg");
-		User u = new User(27729L, "female", name, location, "tess.boyer@example.com", login, dob, registered, "05-60-96-09-09", "06-99-08-80-75", id, picture, "FR", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), StatusEnum.PUBLISHED);
+		User u = new User(userRepository.getLast(), "male", name, location, "tess.boyer@example.com", login, dob, registered, "05-60-96-09-09", "06-99-08-80-75", id, picture, "FR", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), StatusEnum.PUBLISHED);
 						
 		
 		return u;
