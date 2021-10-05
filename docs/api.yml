@@ -230,6 +230,8 @@ paths:
       responses: 
         '200':
           description: OK
+        '204':
+          description: Usuário não encontrado na base
         '401':
           $ref: "#/components/responses/UnauthorizedError"
     delete:
