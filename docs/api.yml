@@ -173,6 +173,8 @@ paths:
                   $ref: '#/components/schemas/User'
         '401':
           $ref: "#/components/responses/UnauthorizedError"
+        '204':
+          description: 'Não há usuários na base'
     post:
       summary: Cria um usuário.
       requestBody:
@@ -188,8 +190,18 @@ paths:
           description: JSON inválido e incompatível com o objeto User
         '401':
           $ref: "#/components/responses/UnauthorizedError"
+        
+  /users/{userId}:
     put:
       summary: Atualiza um usuário.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       requestBody:
         required: true
         content:
@@ -199,8 +211,12 @@ paths:
       responses:
         '200':
           description: OK
-        
-  /users/{userId}:
+        '400':
+          description: JSON inválido para atualizar usuário
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Registro não existe na base para ser atualizado
     get:
       summary: Retorna um usuário pelo ID.
       parameters:
@@ -216,4 +232,20 @@ paths:
           description: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
-          
+    delete:
+      summary: Remover o user da base
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Não existe o usuário a ser deletado
