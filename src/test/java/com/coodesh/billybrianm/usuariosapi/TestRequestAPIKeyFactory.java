@@ -18,4 +18,9 @@ public class TestRequestAPIKeyFactory {
         return MockMvcRequestBuilders.put(url)
                 .header("X-API-KEY", "fc857686d5928f4b1babb2574e93e4f3");
     }
+	
+	public static MockHttpServletRequestBuilder delete(String url) {
+        return MockMvcRequestBuilders.delete(url)
+                .header("X-API-KEY", "fc857686d5928f4b1babb2574e93e4f3");
+    }
 }
