@@ -1,13 +1,13 @@
 setup:
-   mvn install
+	mvn install
 
 build:
-   echo "nada a buildar"
+	echo "nada a buildar"
 
 run:
-   ./mvnw spring-boot:run
+	./mvnw spring-boot:run
 
 dockertest:
-   make setup
-   make build
-   make run
+	make setup
+	make build
+	make run
