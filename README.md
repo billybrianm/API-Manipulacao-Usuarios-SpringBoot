@@ -1,5 +1,5 @@
-# Back-end Challenge 🏅 2021
-Desafio de desenvolvimento de sistema back-end para API de manipulação de usuários
+# Manipulação Usuários CRUD API
+
 ### Tecnologias utilizadas
 
 - Java
